@@ -65,3 +65,23 @@ spring:
         # 黑名单（共同存在时，deny优先于allow）
         #deny: localhost
 
+# springdoc-openapi项目配置
+springdoc:
+  swagger-ui:
+    # swagger ui 路径
+    path: /swagger-ui.html
+    # 排序方式 alpha 按字母顺序
+    tags-sorter: alpha
+    operations-sorter: alpha
+  api-docs:
+    # 接口文档路径
+    path: /v3/api-docs
+  group-configs:
+    - group: 'sys'
+      paths-to-match: '/**'
+      packages-to-scan: com.xm.module.sys
+# knife4j的增强配置，不需要增强可以不配
+knife4j:
+  enable: true
+  setting:
+    language: zh_cn
