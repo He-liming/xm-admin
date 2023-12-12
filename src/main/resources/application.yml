@@ -1,0 +1,25 @@
+server:
+  # 运行端口
+  port: 9527
+  # 项目路径
+  servlet:
+    context-path: /xm
+  # 都是给的默认值，可以不配，只是告诉大家 spring boot starter 大都都是修改参数就行
+  tomcat:
+    # uri 解析编码
+    uri-encoding: UTF-8
+    # 最大连接数
+    max-connections: 8192
+    threads:
+      # 最大工作线程
+      max: 200
+      # 最小工作线程
+      min-spare: 10
+
+spring:
+  # 应用名称
+  application:
+    name: xm-admin
+  # 运行环境
+  profiles:
+    active: dev

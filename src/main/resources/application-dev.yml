@@ -1,0 +1,67 @@
+spring:
+  # 配置数据源
+  datasource:
+    # 数据库连接池类型
+    type: com.alibaba.druid.pool.DruidDataSource
+    # mysql 6.0 以上的新驱动类
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    # 新驱动类在 URL 中需要加上时区配置 serverTimezone=GMT%2B8（东八区），否则会插入数据可能会有时差
+    url: jdbc:mysql://localhost:3306/xm_admin?useUnicode=true&useSSL=false&characterEncoding=utf8&serverTimezone=GMT%2B8
+    username: xm
+    password: xm-admin
+    # 配置 Alibaba Druid 连接池
+    druid:
+      # 配置监控统计拦截的filters，去掉后监控界面sql无法统计，'wall'用于防火墙
+      filters: stat,wall,slf4j
+      # 最大连接池数量 maxIdle已经不再使用
+      max-active: 20
+      # 初始化时建立物理连接的个数
+      initial-size: 1
+      # 获取连接时最大等待时间，单位毫秒
+      max-wait: 60000
+      # 最小连接池数量
+      min-idle: 1
+      # 既作为检测的间隔时间又作为testWhileIdel执行的依据
+      time-between-eviction-runs-millis: 60000
+      # 销毁线程时检测当前连接的最后活动时间和当前时间差大于该值时，关闭当前连接
+      min-evictable-idle-time-millis: 300000
+      # 用来检测连接是否有效的sql 必须是一个查询语句 mysql中为 select 'x' oracle中为 select 1 from dual
+      validation-query: select 'x'
+      # 申请连接的时候检测，如果空闲时间大于timeBetweenEvictionRunsMillis，执行validationQuery检测连接是否有效。
+      test-while-idle: true
+      # 申请连接时会执行validationQuery检测连接是否有效,开启会降低性能,默认为true
+      test-on-borrow: false
+      # 归还连接时会执行validationQuery检测连接是否有效,开启会降低性能,默认为true
+      test-on-return: false
+      # 是否缓存preparedStatement，也就是PSCache 官方建议MySQL下建议关闭 个人建议如果想用SQL防火墙 建议打开
+      pool-prepared-statements: false
+      max-open-prepared-statements: 20
+      #当值大于0时poolPreparedStatements会自动修改为true
+      max-pool-prepared-statement-per-connection-size: 20
+      # 通过connectProperties属性来打开mergeSql功能；慢SQL记录
+      connect-properties: druid.stat.mergeSql=true;druid.stat.slowSqlMillis=5000
+      # 合并多个DruidDataSource的监控数据
+      use-global-data-source-stat: true
+      # 基础监控配置
+      web-stat-filter:
+        enabled: true
+        # 添加过滤规则
+        url-pattern: /*
+        # 设置忽略哪些URL
+        exclusions: "*.js,*.gif,*.jpg,*.png,*.css,*.ico,/druid/*"
+        session-stat-enable: true
+        session-stat-max-count: 100
+      #设置视图拦截,访问druid监控页的账号和密码,默认没有
+      stat-view-servlet:
+        enabled: true
+        # 访问路径为/druid时，跳转到StatViewServlet
+        url-pattern: /druid/*
+        reset-enable: true
+        # 设置监控页面的登录名和密码
+        login-username: admin
+        login-password: admin
+        # 白名单ip
+        allow: 127.0.0.1
+        # 黑名单（共同存在时，deny优先于allow）
+        #deny: localhost
+
