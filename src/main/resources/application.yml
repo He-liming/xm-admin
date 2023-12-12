@@ -23,3 +23,19 @@ spring:
   # 运行环境
   profiles:
     active: dev
+  jpa:
+    # 控制台显示SQL
+    show-sql: true
+    hibernate:
+      # 程序启动后自动更新或者创建数据表结构
+      ddl-auto: update
+    properties:
+      hibernate:
+        # 格式化打印 sql
+        format_sql: true
+    # 解决 warn
+    open-in-view: false
+  jackson:
+    # 全局日期格式化
+    date-format: yyyy-MM-dd HH:mm:ss
+    time-zone: GMT+8
