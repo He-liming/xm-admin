@@ -17,6 +17,7 @@
         <java.version>17</java.version>
         <druid.version>1.2.20</druid.version>
         <knife4j.version>4.3.0</knife4j.version>
+        <hutool.version>5.8.18</hutool.version>
     </properties>
     <dependencies>
         <dependency>
@@ -40,6 +41,12 @@
             <groupId>com.github.xiaoymin</groupId>
             <artifactId>knife4j-openapi3-jakarta-spring-boot-starter</artifactId>
             <version>${knife4j.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>cn.hutool</groupId>
+            <artifactId>hutool-all</artifactId>
+            <version>${hutool.version}</version>
         </dependency>
 
         <dependency>
