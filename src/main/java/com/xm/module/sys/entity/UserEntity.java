@@ -1,11 +1,15 @@
 package com.xm.module.sys.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.xm.common.base.BaseEntity;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.persistence.*;
 import lombok.Data;
+import org.hibernate.annotations.DynamicUpdate;
 
 import java.io.Serializable;
+import java.util.Date;
+import java.util.List;
 
 /**
  * 用户实体类
@@ -15,40 +19,39 @@ import java.io.Serializable;
  **/
 @Data
 @Entity
+@DynamicUpdate
 @Table(name = "sys_user")
 @Schema(description = "用户实体")
 public class UserEntity extends BaseEntity implements Serializable {
 
-    /**
-     * Id 表示为表 ID
-     * GenerationType.IDENTITY 使用自增长主键
-     */
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Schema(description = "用户ID")
-    private Long id;
-
-    /**
-     * REQUIRED 表示用户必填
-     */
-    @Schema(description = "用户名称", requiredMode = Schema.RequiredMode.REQUIRED)
+    @Column(unique = true, columnDefinition = "varchar(32) NOT NULL COMMENT '名称'")
+    @Schema(description = "用户名称")
     private String name;
 
-    @Schema(description = "用户昵称")
-    private String nickname;
+    @Column(columnDefinition = "char(11) COMMENT '手机号'")
+    @Schema(description = "手机号")
+    private String mobile;
 
-    @Schema(description = "用户年龄")
-    private Integer age;
+    @Column(columnDefinition = "varchar(255) COMMENT '头像'")
+    @Schema(description = "头像")
+    private String avatar;
 
-    /**
-     * example 表示示例的值，页面测试可以不用填写直接使用此值。
-     */
-    @Schema(description = "用户邮箱", example = "xm@xm.com")
+    @Column(columnDefinition = "varchar(50) COMMENT '邮箱'")
+    @Schema(description = "用户邮箱")
     private String email;
 
-    /**
-     * hidden 表示不在文档中显示该字段
-     */
-    @Schema(description = "用户密码", requiredMode = Schema.RequiredMode.REQUIRED, hidden = true)
+    @Column(columnDefinition = "varchar(12) NOT NULL COMMENT '密码'")
+    @Schema(description = "用户密码")
     private String password;
+
+    @Column(columnDefinition = "datetime COMMENT '最后登录时间'")
+    @Schema(description = "最后登录时间")
+    private Date lastLoginTime;
+
+    @ManyToMany(fetch = FetchType.EAGER)
+    @JoinTable(name = "sys_user_role",
+            joinColumns = {@JoinColumn(name = "user_id", referencedColumnName = "id")},
+            inverseJoinColumns = {@JoinColumn(name = "role_id", referencedColumnName = "id")})
+    @Schema(description = "用户角色")
+    private List<RoleEntity> roles;
 }

@@ -25,34 +25,28 @@ public class UserController {
     @Resource
     private UserService userService;
 
-    @GetMapping("/{id}")
-    @Operation(summary = "根据用户ID查询用户")
-    public UserEntity get(@PathVariable Long id) {
-        return userService.get(id);
-    }
-
-    @GetMapping("/list")
-    @Operation(summary = "查询全部")
-    public List<UserEntity> lists() {
-        return userService.lists();
-    }
-
     @GetMapping("/page")
     @Operation(summary = "分页查询")
     public Page<UserEntity> page(int page, int size) {
         return userService.page(PageRequest.of(page - 1, size));
     }
 
-    @PostMapping
-    @Operation(summary = "新增用户")
-    public void save(@RequestBody UserEntity user) {
-        userService.save(user);
+    @GetMapping("/{id}")
+    @Operation(summary = "根据用户ID查询用户")
+    public UserEntity get(@PathVariable Long id) {
+        return userService.get(id);
     }
 
-    @PutMapping
-    @Operation(summary = "修改用户")
-    public void update(@RequestBody UserEntity user) {
-        userService.update(user);
+    @GetMapping("/name/{name}")
+    @Operation(summary = "根据用户名称查询用户")
+    public UserEntity getByName(@PathVariable String name) {
+        return userService.getByName(name);
+    }
+
+    @PostMapping
+    @Operation(summary = "新增|修改用户")
+    public void upsert(@RequestBody List<UserEntity> users) {
+        userService.upsert(users);
     }
 
     @DeleteMapping("/{id}")

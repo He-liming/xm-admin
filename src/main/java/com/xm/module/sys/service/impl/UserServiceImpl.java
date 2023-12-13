@@ -1,5 +1,6 @@
 package com.xm.module.sys.service.impl;
 
+import com.xm.common.util.JpaUtils;
 import com.xm.module.sys.entity.UserEntity;
 import com.xm.module.sys.repository.UserRepository;
 import com.xm.module.sys.service.UserService;
@@ -9,6 +10,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 
 /**
  * @author xiaoming
@@ -21,23 +23,33 @@ public class UserServiceImpl implements UserService {
     private UserRepository userRepository;
 
     @Override
+    public Page<UserEntity> page(Pageable pageable) {
+        return userRepository.findAll(pageable);
+    }
+
+    @Override
     public UserEntity get(Long id) {
         return userRepository.findById(id).orElse(null);
     }
 
     @Override
-    public List<UserEntity> lists() {
-        return userRepository.findAll();
+    public UserEntity getByName(String name) {
+        return userRepository.findByName(name);
     }
 
     @Override
-    public void save(UserEntity user) {
-        userRepository.save(user);
-    }
-
-    @Override
-    public void update(UserEntity user) {
-        userRepository.save(user);
+    public void upsert(List<UserEntity> users) {
+        users.forEach(user -> {
+            Optional<UserEntity> userEntity = userRepository.findById(user.getId());
+            if (userEntity.isPresent()) {
+                // 修改
+                JpaUtils.copyNotNullProperties(user, userEntity.get());
+                userRepository.save(userEntity.get());
+            } else {
+                // 新增
+                userRepository.save(user);
+            }
+        });
     }
 
     @Override
@@ -45,8 +57,4 @@ public class UserServiceImpl implements UserService {
         userRepository.deleteById(id);
     }
 
-    @Override
-    public Page<UserEntity> page(Pageable pageable) {
-        return userRepository.findAll(pageable);
-    }
 }

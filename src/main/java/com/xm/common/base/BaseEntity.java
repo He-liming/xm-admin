@@ -1,9 +1,7 @@
 package com.xm.common.base;
 
 import io.swagger.v3.oas.annotations.media.Schema;
-import jakarta.persistence.Column;
-import jakarta.persistence.EntityListeners;
-import jakarta.persistence.MappedSuperclass;
+import jakarta.persistence.*;
 import lombok.Data;
 import org.springframework.data.annotation.CreatedBy;
 import org.springframework.data.annotation.CreatedDate;
@@ -25,23 +23,36 @@ import java.util.Date;
 @Schema(description = "基础实体")
 public class BaseEntity {
 
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Schema(description = "用户ID")
+    private Long id;
+
+    @Column(columnDefinition = "tinyint(1) NOT NULL COMMENT '状态'")
+    @Schema(description = "状态")
+    private Integer status;
+
+    @Column(columnDefinition = "bit NOT NULL COMMENT '0正常，1删除'")
+    @Schema(description = "逻辑删除")
+    private Boolean isDelete;
+
     @CreatedBy
-    @Column(name = "create_user", updatable = false)
-    @Schema(description = "创建用户")
+    @Column(updatable = false, columnDefinition = "varchar(32) COMMENT '创建用户'")
+    @Schema(description = "创建用户", hidden = true)
     private String createUser;
 
     @LastModifiedBy
-    @Column(name = "update_user")
-    @Schema(description = "修改用户")
+    @Column(columnDefinition = "varchar(32) COMMENT '修改用户'")
+    @Schema(description = "修改用户", hidden = true)
     private String updateUser;
 
     @CreatedDate
-    @Column(name = "create_time", updatable = false)
-    @Schema(description = "创建时间")
+    @Column(updatable = false, columnDefinition = "datetime COMMENT '创建时间'")
+    @Schema(description = "创建时间", hidden = true)
     private Date createTime;
 
     @LastModifiedDate
-    @Column(name = "update_time")
-    @Schema(description = "修改时间")
+    @Column(columnDefinition = "datetime COMMENT '修改时间'")
+    @Schema(description = "修改时间", hidden = true)
     private Date updateTime;
 }

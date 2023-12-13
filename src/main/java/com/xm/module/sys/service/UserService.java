@@ -13,6 +13,14 @@ import java.util.List;
 public interface UserService {
 
     /**
+     * 分页查询用户
+     *
+     * @param pageable 分页参数
+     * @return Page<UserEntity> 分页用户
+     */
+    Page<UserEntity> page(Pageable pageable);
+
+    /**
      * 根据ID查询用户
      *
      * @param id 用户ID
@@ -21,25 +29,19 @@ public interface UserService {
     UserEntity get(Long id);
 
     /**
-     * 查询全部用户
+     * 根据名称查询用户
      *
-     * @return List<UserEntity> 用户集合
+     * @param name 用户名称
+     * @return UserEntity 用户信息
      */
-    List<UserEntity> lists();
+    UserEntity getByName(String name);
 
     /**
-     * 保存用户
+     * 保存/更新用户
      *
-     * @param user 用户信息
+     * @param users 用户信息
      */
-    void save(UserEntity user);
-
-    /**
-     * 修改用户
-     *
-     * @param user 用户信息
-     */
-    void update(UserEntity user);
+    void upsert(List<UserEntity> users);
 
     /**
      * 删除用户
@@ -47,13 +49,5 @@ public interface UserService {
      * @param id 用户id
      */
     void delete(Long id);
-
-    /**
-     * 分页查询用户
-     *
-     * @param pageable 分页参数
-     * @return Page<UserEntity> 分页用户
-     */
-    Page<UserEntity> page(Pageable pageable);
 
 }
