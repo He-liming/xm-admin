@@ -1,6 +1,5 @@
 package com.xm.module.sys.entity;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.xm.common.base.BaseEntity;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.persistence.*;

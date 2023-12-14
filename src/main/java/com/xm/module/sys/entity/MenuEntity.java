@@ -1,5 +1,6 @@
 package com.xm.module.sys.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.xm.common.base.BaseEntity;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.persistence.Column;
@@ -51,6 +52,7 @@ public class MenuEntity extends BaseEntity implements Serializable {
     @Schema(description = "排序")
     private Integer sort;
 
+    @JsonIgnore
     @ManyToMany(mappedBy = "menus")
     @Schema(description = "菜单包含的角色")
     private List<RoleEntity> roles;

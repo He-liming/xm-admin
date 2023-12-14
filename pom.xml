@@ -17,7 +17,7 @@
         <java.version>17</java.version>
         <druid.version>1.2.20</druid.version>
         <knife4j.version>4.3.0</knife4j.version>
-        <hutool.version>5.8.18</hutool.version>
+        <hutool.version>5.8.16</hutool.version>
     </properties>
     <dependencies>
         <dependency>
@@ -47,6 +47,18 @@
             <groupId>cn.hutool</groupId>
             <artifactId>hutool-all</artifactId>
             <version>${hutool.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>com.baomidou</groupId>
+            <artifactId>mybatis-plus-generator</artifactId>
+            <version>3.3.1</version>
+            <!--<scope>provided</scope>-->
+        </dependency>
+
+        <dependency>
+            <groupId>org.freemarker</groupId>
+            <artifactId>freemarker</artifactId>
         </dependency>
 
         <dependency>
