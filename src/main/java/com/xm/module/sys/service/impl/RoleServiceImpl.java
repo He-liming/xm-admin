@@ -13,7 +13,7 @@ import java.util.List;
 import java.util.Optional;
 
 /**
- *  服务实现类
+ * 服务实现类
  *
  * @author xiaoming
  * @date 2023-12-14
@@ -40,16 +40,22 @@ public class RoleServiceImpl implements RoleService {
     }
 
     @Override
-    public void upsert(List<RoleEntity> data) {
-        data.forEach(d -> {
-            Optional<RoleEntity> entity = repository.findById(d.getId());
-            if (entity.isPresent()) {
-                // 修改
-                JpaUtils.copyNotNullProperties(d, entity.get());
-                repository.save(entity.get());
+    public void upsert(List<RoleEntity> roles) {
+        roles.forEach(role -> {
+            Long id = role.getId();
+            if (id != null) {
+                Optional<RoleEntity> roleEntity = repository.findById(id);
+                if (roleEntity.isPresent()) {
+                    // 修改
+                    JpaUtils.copyNotNullProperties(role, roleEntity.get());
+                    repository.save(roleEntity.get());
+                } else {
+                    // 新增
+                    repository.save(role);
+                }
             } else {
                 // 新增
-                repository.save(d);
+                repository.save(role);
             }
         });
     }

@@ -13,7 +13,7 @@ import java.util.List;
 import java.util.Optional;
 
 /**
- *  服务实现类
+ * 服务实现类
  *
  * @author xiaoming
  * @date 2023-12-14
@@ -40,16 +40,22 @@ public class MenuServiceImpl implements MenuService {
     }
 
     @Override
-    public void upsert(List<MenuEntity> data) {
-        data.forEach(d -> {
-            Optional<MenuEntity> entity = repository.findById(d.getId());
-            if (entity.isPresent()) {
-                // 修改
-                JpaUtils.copyNotNullProperties(d, entity.get());
-                repository.save(entity.get());
+    public void upsert(List<MenuEntity> menus) {
+        menus.forEach(menu -> {
+            Long id = menu.getId();
+            if (id != null) {
+                Optional<MenuEntity> menuEntity = repository.findById(id);
+                if (menuEntity.isPresent()) {
+                    // 修改
+                    JpaUtils.copyNotNullProperties(menu, menuEntity.get());
+                    repository.save(menuEntity.get());
+                } else {
+                    // 新增
+                    repository.save(menu);
+                }
             } else {
                 // 新增
-                repository.save(d);
+                repository.save(menu);
             }
         });
     }

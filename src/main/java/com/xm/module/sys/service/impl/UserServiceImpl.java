@@ -40,11 +40,17 @@ public class UserServiceImpl implements UserService {
     @Override
     public void upsert(List<UserEntity> users) {
         users.forEach(user -> {
-            Optional<UserEntity> userEntity = userRepository.findById(user.getId());
-            if (userEntity.isPresent()) {
-                // 修改
-                JpaUtils.copyNotNullProperties(user, userEntity.get());
-                userRepository.save(userEntity.get());
+            Long id = user.getId();
+            if (id != null) {
+                Optional<UserEntity> userEntity = userRepository.findById(id);
+                if (userEntity.isPresent()) {
+                    // 修改
+                    JpaUtils.copyNotNullProperties(user, userEntity.get());
+                    userRepository.save(userEntity.get());
+                } else {
+                    // 新增
+                    userRepository.save(user);
+                }
             } else {
                 // 新增
                 userRepository.save(user);
