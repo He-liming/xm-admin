@@ -11,9 +11,17 @@ public enum ResponseCode {
      */
     OK(200, "OK"),
     /**
+     * 未认证
+     */
+    UNAUTHORIZED(401, "未认证，请先登录！"),
+    /**
+     * 资源不存在
+     */
+    NOT_FOUND(404, "Not Found"),
+    /**
      * 失败
      */
-    ERROR(500,"系统异常，请稍后重试");
+    ERROR(500, "系统异常，请稍后重试");
 
     private final int code;
 

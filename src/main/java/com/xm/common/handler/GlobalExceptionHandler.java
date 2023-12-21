@@ -4,6 +4,7 @@ import com.xm.common.response.Response;
 import com.xm.common.response.ResponseCode;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
+import org.springframework.web.servlet.resource.NoResourceFoundException;
 
 /**
  * 全局异常拦截
@@ -25,6 +26,11 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(Exception.class)
     public Response<String> exception(Exception e) {
         return Response.error(ResponseCode.ERROR);
+    }
+
+    @ExceptionHandler(NoResourceFoundException.class)
+    public Response<String> noResourceFoundException(NoResourceFoundException e) {
+        return Response.error(ResponseCode.NOT_FOUND);
     }
 
 }
