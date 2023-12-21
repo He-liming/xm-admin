@@ -5,8 +5,11 @@ import cn.hutool.captcha.CircleCaptcha;
 import cn.hutool.captcha.LineCaptcha;
 import cn.hutool.captcha.ShearCaptcha;
 import cn.hutool.captcha.generator.RandomGenerator;
+import com.xm.common.constant.Constant;
+import com.xm.common.util.RedisUtils;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.annotation.Resource;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -26,6 +29,9 @@ import java.io.IOException;
 @RequestMapping("/sys/captcha")
 public class CaptchaController {
 
+    @Resource
+    private RedisUtils redisUtils;
+
     @GetMapping("/line")
     @Operation(summary = "创建线段干扰的验证码")
     public void createLineCaptcha(HttpServletResponse response, HttpSession session) throws IOException {
@@ -34,8 +40,8 @@ public class CaptchaController {
         captcha.setGenerator(randomGenerator);
         // 重新生成code
         captcha.createCode();
-        // 存储到session中等待校验, 等集成了 redis 之后用 redis, 先走个流程
-        session.setAttribute("captcha", captcha.getCode());
+        // 验证码放到redis中并且30s过期
+        redisUtils.set(Constant.CAPTCHA, captcha.getCode(), 30);
         // 直接写出到浏览器
         captcha.write(response.getOutputStream());
     }
@@ -48,8 +54,8 @@ public class CaptchaController {
         captcha.setGenerator(randomGenerator);
         // 重新生成code
         captcha.createCode();
-        // 存储到session中等待校验, 等集成了 redis 之后用 redis, 先走个流程
-        session.setAttribute("captcha", captcha.getCode());
+        // 验证码放到redis中并且30s过期
+        redisUtils.set(Constant.CAPTCHA, captcha.getCode(), 30);
         // 直接写出到浏览器
         captcha.write(response.getOutputStream());
     }
@@ -62,8 +68,8 @@ public class CaptchaController {
         captcha.setGenerator(randomGenerator);
         // 重新生成code
         captcha.createCode();
-        // 存储到session中等待校验, 等集成了 redis 之后用 redis, 先走个流程
-        session.setAttribute("captcha", captcha.getCode());
+        // 验证码放到redis中并且30s过期
+        redisUtils.set(Constant.CAPTCHA, captcha.getCode(), 30);
         // 直接写出到浏览器
         captcha.write(response.getOutputStream());
     }

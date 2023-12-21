@@ -2,6 +2,7 @@ package com.xm.security.filter;
 
 import cn.hutool.core.util.StrUtil;
 import com.xm.common.constant.Constant;
+import com.xm.common.util.RedisUtils;
 import com.xm.security.AuthenticationFailureHandlerImpl;
 import com.xm.security.exception.AuthException;
 import jakarta.annotation.Resource;
@@ -25,6 +26,9 @@ import java.io.IOException;
 public class CaptchaFilter extends OncePerRequestFilter {
 
     @Resource
+    private RedisUtils redisUtils;
+
+    @Resource
     private AuthenticationFailureHandlerImpl authenticationFailureHandler;
 
     @Override
@@ -43,7 +47,9 @@ public class CaptchaFilter extends OncePerRequestFilter {
             }
 
             // 获取存储的验证码
-            String sessionCaptcha = (String) request.getSession().getAttribute(Constant.CAPTCHA);
+            String sessionCaptcha = (String) redisUtils.get(Constant.CAPTCHA);
+            // 验证码使用完之后就删除，一次性使用，或者你也可以在登录完成后删除
+            redisUtils.del(Constant.CAPTCHA);
             if (!captcha.equalsIgnoreCase(sessionCaptcha)) {
                 throw new AuthException("验证码错误！");
             }
